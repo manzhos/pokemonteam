@@ -1,0 +1,89 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreatePokemonInput {
+  abilities: [JSONObject!]
+  base_experience: Float!
+  name: String!
+  sprite_image: JSONObject
+  teamIds: [Float!]
+  types: [JSONObject!]
+}
+
+input CreateTeamInput {
+  name: String!
+  trainerId: Float!
+}
+
+input CreateTrainerInput {
+  email: String!
+  name: String
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+type Mutation {
+  createPokemon(createPokemon: CreatePokemonInput!): PokemonEntity!
+  createTeam(createTeam: CreateTeamInput!): TeamEntity!
+  createTrainer(createTrainer: CreateTrainerInput!): TrainerEntity!
+  removePokemon(id: Float!): Float!
+  removeTeam(id: Float!): Float!
+  removeTrainer(id: Float!): Float!
+  updateTeam(updateTeam: UpdateTeamInput!): TeamEntity!
+}
+
+type PokemonEntity {
+  abilities: [JSONObject!]
+  base_experience: Float
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  sprite_image: JSONObject
+  teamIds: [Float!]
+  types: [JSONObject!]
+  updatedAt: DateTime!
+}
+
+type Query {
+  getAllPokemon: [PokemonEntity!]!
+  getAllTeam: [TeamEntity!]!
+  getAllTrainer: [TrainerEntity!]!
+  getOnePokemon(id: Float!): PokemonEntity!
+  getOneTeam(id: Float!): TeamEntity!
+  getOneTrainer(id: Float!): TrainerEntity!
+  getPokemonByTeam(teamId: Float!): [PokemonEntity!]!
+  getTeamByTrainer(trainerId: Float!): [TeamEntity!]!
+}
+
+type TeamEntity {
+  createdAt: DateTime!
+  id: ID!
+  name: String
+  trainerId: Float!
+  updatedAt: DateTime!
+}
+
+type TrainerEntity {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String
+  password: String!
+  updatedAt: DateTime!
+}
+
+input UpdateTeamInput {
+  id: ID!
+  name: String!
+  trainerId: Float!
+}

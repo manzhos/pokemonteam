@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: postgres-pokemonteam
+    image: postgres:14.0-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+
+  server:
+    container_name: server-pokemonteam
+    build:
+      context: ./server
+    depends_on:
+      - db
+    restart: unless-stopped
+    ports:
+      - '${API_PORT}:${API_PORT}'
+    environment:
+      - API_PORT=${API_PORT}
+      - API_HOST=${API_HOST}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=db
+
+  client:
+    container_name: client-pokemonteam
+    build:
+      context: ./client
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    command: npm run start:prod
+    depends_on:
+      - db
+    restart: always
